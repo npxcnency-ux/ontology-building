@@ -124,7 +124,7 @@
 
 **问题**: SKILL.md承诺了3个例子，实际只有1个
 
-**发现时间**: 2024-03-19（用户发现）
+**发现时间**: 2026-03-19（用户发现）
 
 **影响**:
 - 用户选择不存在的例子会报错
@@ -159,7 +159,7 @@
 
 **问题**: 这是创造性工作（创建新skill），应该先brainstorm，但直接开始实现了
 
-**发现时间**: 2024-03-19（用户提问）
+**发现时间**: 2026-03-19（用户提问）
 
 **影响**:
 - 跳过了探索多种设计方案的机会
@@ -470,6 +470,86 @@ ontology-builder/
 
 ---
 
+### 删除中间态文件
+
+**原则**: 项目完成后，及时删除中间态报告文件，只保留最终文档。
+
+**为什么要删除**:
+- 避免信息冗余（中间报告的内容已整合到最终文档）
+- 保持项目结构清晰
+- 减少维护负担
+- 符合"Don't State the Obvious"原则
+
+**删除流程**:
+
+1. **识别中间态文件**
+   - Task完成报告（TASK_X_COMPLETION_REPORT.md）
+   - 阶段性验证报告（SKILL_VERIFICATION_REPORT.md）
+   - Bug修复记录（BUG_FIX_RECORD.md）- 如果已整合到CLAUDE.md
+   - 项目摘要（PROJECT_SUMMARY.md）- 如果有更完整的最终报告
+
+2. **确认信息已整合**
+
+   删除前必须确认信息去向：
+
+   | 删除的文件 | 信息去向 |
+   |-----------|---------|
+   | TASK_X_COMPLETION_REPORT.md | 整合到PROJECT_COMPLETION_REPORT.md或CLAUDE.md |
+   | BUG_FIX_RECORD.md | 整合到CLAUDE.md的"已知陷阱"部分 |
+   | SKILL_VERIFICATION_REPORT.md | 整合到PROJECT_COMPLETION_REPORT.md |
+   | PROJECT_SUMMARY.md | 被更完整的PROJECT_COMPLETION_REPORT.md替代 |
+
+3. **执行删除**
+   ```bash
+   # 删除中间态文件
+   rm -f TASK_*_REPORT.md
+   rm -f BUG_FIX_RECORD.md
+   rm -f SKILL_VERIFICATION_REPORT.md
+   rm -f PROJECT_SUMMARY.md
+   ```
+
+4. **验证结果**
+   ```bash
+   # 检查是否还有不需要的文件
+   find . -name "*REPORT.md" -o -name "*RECORD.md" | grep -v "PROJECT_COMPLETION_REPORT\|CLEANUP_REPORT"
+   ```
+
+5. **更新CLEANUP_REPORT.md**
+   - 记录删除了哪些文件
+   - 说明每个文件的信息去向
+   - 用于未来追溯
+
+**保留的文件**:
+- ✅ PROJECT_COMPLETION_REPORT.md（最终完成报告）
+- ✅ CLAUDE.md（项目记忆）
+- ✅ README.md（项目说明）
+- ✅ docs/CLEANUP_REPORT.md（清理记录）
+- ✅ docs/TESTING.md（TDD测试文档）
+- ✅ docs/VERIFICATION.md（验证清单）
+
+**实际案例**（本项目）:
+```bash
+# 2026-03-19执行的清理
+删除了6个中间态文件：
+- TASK_7_FIX_REPORT.md → 内容已整合到CLAUDE.md Gotcha #3
+- TASK_9_COMPLETION_REPORT.md → 内容已整合到PROJECT_COMPLETION_REPORT.md
+- TDD_COMPLETION_REPORT.md → 内容已整合到docs/TESTING.md
+- SKILL_VERIFICATION_REPORT.md → 内容已整合到PROJECT_COMPLETION_REPORT.md
+- BUG_FIX_RECORD.md → 内容已整合到CLAUDE.md Gotcha #1
+- PROJECT_SUMMARY.md → 被PROJECT_COMPLETION_REPORT.md替代
+
+结果: markdown文件从21个减少到10个（-52%）
+```
+
+**关键原则**:
+- ✅ 先整合信息，再删除文件
+- ✅ 在CLEANUP_REPORT.md记录删除历史
+- ✅ 保留核心文档（CLAUDE.md, PROJECT_COMPLETION_REPORT.md, README.md）
+- ❌ 不要删除skill核心文件（SKILL.md, references/, examples/）
+- ❌ 不要删除项目文档（docs/目录下的文件）
+
+---
+
 ### 修改引导问题
 
 如果发现某个阶段的引导问题不够清晰：
@@ -563,7 +643,7 @@ ontology-builder/
 
 ## 🔄 版本历史
 
-### v1.0.0 (2024-03-19)
+### v1.0.0 (2026-03-19)
 
 **主要功能**:
 - ✅ 5阶段交互式引导
@@ -656,8 +736,8 @@ ontology-builder/
 ## 📞 联系信息
 
 **项目维护者**: Ontology Team
-**创建时间**: 2024-03-19
-**最后更新**: 2024-03-19
+**创建时间**: 2026-03-19
+**最后更新**: 2026-03-19
 **文档版本**: 1.0.0
 
 ---
@@ -673,7 +753,7 @@ ontology-builder/
 ### 3. 文档与实现同步
 每次修改代码/添加文件后，立即更新相关文档。定期运行验证脚本确保一致性。
 
-### 4. **Skills也要TDD！**（新增 2024-03-19）
+### 4. **Skills也要TDD！**（新增 2026-03-19）
 **No Skill Without Test First.** 这是writing-skills的铁律，和代码的TDD一样严格：
 - RED: 运行baseline测试（没有skill时agent怎么做）
 - GREEN: 验证skill解决了baseline问题
@@ -684,7 +764,7 @@ ontology-builder/
 
 ## 📅 验证历史
 
-### 2024-03-19: Writing-Skills验证
+### 2026-03-19: Writing-Skills验证
 
 **验证者**: superpowers:writing-skills
 
