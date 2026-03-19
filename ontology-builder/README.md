@@ -212,6 +212,6 @@ Internal Use Only - Anthropic
 
 ---
 
-**最后更新**: 2024-03-19
+**最后更新**: 2026-03-19
 **维护者**: Ontology Team
 **版本**: 1.0.0
