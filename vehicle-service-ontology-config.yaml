@@ -737,43 +737,143 @@ actions:
 
   accept_work_order:
     displayName: "技师接单"
+    description: "技师确认接受分配的维修工单"
     actionType: "update"
+
+    permissions:
+      roles:
+        - "技师"
+
+    preconditions:
+      - condition: "work_order_status == '进行中' && assigned_technician == CURRENT_USER"
+        errorMessage: "只能接自己被分配的工单"
 
   vehicle_check_in:
     displayName: "车辆进店"
+    description: "记录车辆到达服务站的时间"
     actionType: "update"
+
+    permissions:
+      roles:
+        - "技师"
+        - "前台"
+
+    preconditions:
+      - condition: "work_order_status == '进行中'"
+        errorMessage: "只能对进行中的工单登记车辆进店"
 
   start_repair:
     displayName: "开始维修"
+    description: "技师开始维修工作"
     actionType: "update"
+
+    permissions:
+      roles:
+        - "技师"
+
+    preconditions:
+      - condition: "work_order_status == '进行中' && assigned_technician == CURRENT_USER"
+        errorMessage: "只能开始维修自己负责的工单"
 
   submit_completion:
     displayName: "提交完工"
+    description: "技师完成维修并提交工单"
     actionType: "update"
+
+    permissions:
+      roles:
+        - "技师"
+
+    preconditions:
+      - condition: "work_order_status == '进行中' && assigned_technician == CURRENT_USER"
+        errorMessage: "只能提交自己负责的工单"
 
   review_and_close:
     displayName: "审核关闭"
+    description: "审核人员审核工单并关闭"
     actionType: "update"
+
+    permissions:
+      roles:
+        - "审核人"
+        - "主管"
+
+    preconditions:
+      - condition: "work_order_status == '已完工'"
+        errorMessage: "只能审核已完工的工单"
 
   edit_work_order:
     displayName: "编辑工单信息"
+    description: "修改工单的基本信息"
     actionType: "update"
+
+    permissions:
+      roles:
+        - "调度员"
+        - "客服"
+        - "主管"
+
+    preconditions:
+      - condition: "work_order_status != '已关闭'"
+        errorMessage: "已关闭的工单不能编辑"
 
   reject_or_transfer:
     displayName: "技师拒单/转派"
+    description: "技师拒绝接单或请求转派给其他技师"
     actionType: "custom"
+
+    permissions:
+      roles:
+        - "技师"
+        - "调度员"
+
+    preconditions:
+      - condition: "work_order_status == '进行中' && (assigned_technician == CURRENT_USER || CURRENT_ROLE == '调度员')"
+        errorMessage: "只能拒绝/转派自己的工单，或调度员可操作任何工单"
 
   cancel_work_order:
     displayName: "取消工单"
+    description: "取消已创建的维修工单"
     actionType: "custom"
+
+    confirmationRequired: true
+
+    permissions:
+      roles:
+        - "主管"
+        - "客服"
+
+    preconditions:
+      - condition: "work_order_status != '已关闭'"
+        errorMessage: "已关闭的工单不能取消"
 
   request_technical_support:
     displayName: "申请技术支持"
+    description: "技师遇到复杂问题申请技术支持"
     actionType: "custom"
+
+    permissions:
+      roles:
+        - "技师"
+
+    preconditions:
+      - condition: "work_order_status == '进行中' && assigned_technician == CURRENT_USER"
+        errorMessage: "只能为自己负责的进行中工单申请技术支持"
 
   mark_as_rework:
     displayName: "返修登记"
+    description: "记录工单需要返修的情况"
     actionType: "custom"
+
+    permissions:
+      roles:
+        - "技师"
+        - "审核人"
+        - "主管"
+
+    preconditions:
+      - condition: "work_order_status == '已完工' || work_order_status == '已关闭'"
+        errorMessage: "只能对已完工或已关闭的工单登记返修"
 
 # ====================
 # 4. AUTOMATIONS (自动化规则)

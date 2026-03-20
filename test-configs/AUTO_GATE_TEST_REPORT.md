@@ -10,12 +10,12 @@
 
 | 配置文件 | P0检查 | P1检查 | P2检查 | 最终结果 |
 |---------|--------|--------|--------|---------|
-| vehicle-service-ontology-config.yaml | ❌ 10个问题 | ⚠️ 31个问题 | 💡 5个建议 | **❌ 未通过** |
+| vehicle-service-ontology-config.yaml | ✅ 通过（已修复） | ⚠️ 25个问题 | 💡 5个建议 | **✅ 通过** |
 | vehicle-ontology-config.yaml | ✅ 通过 | ⚠️ 8个问题 | 💡 1个建议 | **✅ 通过** |
 | technician-ontology-config.yaml | ✅ 通过 | ⚠️ 17个问题 | 💡 1个建议 | **✅ 通过** |
 | parts-ontology-config.yaml | ✅ 通过 | ⚠️ 19个问题 | 💡 1个建议 | **✅ 通过** |
 
-**通过率**: 75% (3/4 通过P0阻断级检查)
+**通过率**: 100% (4/4 通过P0阻断级检查) ← **修复后从75%提升到100%**
 
 ---
 
@@ -23,7 +23,7 @@
 
 ### 配置1: vehicle-service-ontology-config.yaml
 
-**P0级问题（阻断级）- 10个**:
+**修复前 P0级问题（阻断级）- 10个**:
 - [P0-4] 所有10个Action都缺少权限控制（permissions）
   - accept_work_order
   - vehicle_check_in
@@ -36,7 +36,15 @@
   - request_technical_support
   - mark_as_rework
 
-**P1级问题（警告级）- 31个**:
+**✅ 修复完成 (2026-03-20)**:
+- ✅ 为所有10个Action添加了完整的permissions字段
+- ✅ 基于业务角色分配权限（技师、调度员、审核人、主管等）
+- ✅ 同时添加了preconditions和description，提升配置完整性
+- ✅ 高危操作（cancel_work_order）添加了confirmationRequired: true
+
+**修复后 P0级问题**: ✅ 无（全部通过）
+
+**P1级问题（警告级）- 25个**:
 - [P1-2] 必填字段过多: 10个（建议≤7个）
 - [P1-4] 7个时间戳字段未明确timeSeries配置
 - [P1-6] 13个Automation缺少rateLimiting配置
