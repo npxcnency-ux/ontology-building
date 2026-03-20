@@ -10,7 +10,7 @@
 
 | 配置文件 | P0检查 | P1检查 | P2检查 | 最终结果 |
 |---------|--------|--------|--------|---------|
-| vehicle-service-ontology-config.yaml | ✅ 通过（已修复） | ⚠️ 25个问题 | 💡 5个建议 | **✅ 通过** |
+| vehicle-service-ontology-config.yaml | ✅ 通过（已修复） | ⚠️ 20个问题 | 💡 5个建议 | **✅ 通过** |
 | vehicle-ontology-config.yaml | ✅ 通过 | ⚠️ 8个问题 | 💡 1个建议 | **✅ 通过** |
 | technician-ontology-config.yaml | ✅ 通过 | ⚠️ 17个问题 | 💡 1个建议 | **✅ 通过** |
 | parts-ontology-config.yaml | ✅ 通过 | ⚠️ 19个问题 | 💡 1个建议 | **✅ 通过** |
@@ -44,18 +44,18 @@
 
 **修复后 P0级问题**: ✅ 无（全部通过）
 
-**P1级问题（警告级）- 25个**:
+**P1级问题（警告级）- 20个**:
 - [P1-2] 必填字段过多: 10个（建议≤7个）
 - [P1-4] 7个时间戳字段未明确timeSeries配置
 - [P1-6] 13个Automation缺少rateLimiting配置
-- [P1-7] 6个Action缺少preconditions
+- [P1-7] ~~6个~~ → 1个Action缺少preconditions（仅create_work_order，创建操作可不设前置条件）
 - [P1-8] 4个Function缺少异常处理
 
 **P2级建议 - 5个**:
 - [P2-2] 缺少metadata（businessContext、targetUsers）
 - [P2-4] 4个Function缺少usageScenarios说明
 
-**修复优先级**: 🔴 高（必须修复P0问题才能生成配置）
+**修复优先级**: 🟡 中（P0已全部通过，建议修复P1问题提升质量）
 
 ---
 
@@ -127,7 +127,7 @@
 
 **发现的高频问题**:
 - **P1-6 (Automation限流)**: 25次触发（所有4个配置都有）
-- **P1-7 (Action前置条件)**: 14次触发
+- **P1-7 (Action前置条件)**: 9次触发（vehicle-service已从6降至1）
 - **P1-4 (时序属性配置)**: 14次触发
 - **P1-1 (数字字段单位)**: 14次触发
 
@@ -206,7 +206,7 @@ if prop_name in audit_fields:
 | P1-4 时序属性配置 | 14次 | ⚠️ 需要优化排除规则 |
 | P1-5 Function复杂度 | 0次 | ✅ 无超长Function |
 | **P1-6 Automation限流** | **25次** | ✅ **高频问题成功识别** |
-| **P1-7 Action前置条件** | **14次** | ✅ **高频问题成功识别** |
+| **P1-7 Action前置条件** | **9次** | ✅ **vehicle-service已修复，高频问题持续识别** |
 | P1-8 Function异常处理 | 5次 | ✅ 有效提醒 |
 
 ### P2级检查（4项全部有效）
@@ -238,7 +238,7 @@ if prop_name in audit_fields:
 | 1 | P1-6 Automation限流 | 25次 | P1 |
 | 2 | P1-1 数字字段单位 | 14次 | P1 |
 | 3 | P1-4 时序属性配置 | 14次 | P1 |
-| 4 | P1-7 Action前置条件 | 14次 | P1 |
+| 4 | P1-7 Action前置条件 | 9次 | P1 |
 | 5 | P0-4 Action权限控制 | 10次 | P0 |
 
 ---
@@ -248,7 +248,7 @@ if prop_name in audit_fields:
 ### 成功验证 ✅
 
 1. **P0阻断级检查有效**: 成功拦截了vehicle-service配置的10个安全漏洞
-2. **P1警告级检查准确**: 识别了75个影响质量的问题
+2. **P1警告级检查准确**: 识别了70个影响质量的问题（vehicle-service修复后从75降至70）
 3. **P2建议级检查实用**: 提供了8个有价值的优化建议
 4. **检查逻辑正确**: 20项检查全部按预期工作
 5. **分级合理**: P0/P1/P2的严重程度划分准确
