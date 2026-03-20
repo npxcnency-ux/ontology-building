@@ -61,8 +61,6 @@ ontology-building/
 │   └── AUTO_GATE_TEST_REPORT.md       # 测试报告
 │
 ├── docs/                              # 项目文档
-│   ├── TESTING.md                     # TDD测试文档（697行）
-│   ├── VERIFICATION.md                # 验证清单（240行）
 │   └── superpowers/                   # 设计与计划文档 ← 新增 v1.1.0
 │       ├── specs/                     # 设计规范
 │       └── plans/                     # 实施计划
@@ -147,10 +145,8 @@ ontology-building/
 ### 进阶学习
 - 研究 `CLAUDE.md` 了解设计决策和经验教训
 - 深入阅读 `ontology-builder/references/` 中的各个指南掌握高级特性
-- 查看 `docs/TESTING.md` 了解TDD测试方法论
-
 ### 开发者参考
-- `docs/` - 项目文档（TDD测试、验证清单、优化报告）
+- `docs/` - 项目文档（设计规范、实施计划）
 - `test-configs/` - 测试配置和验证脚本 ← 新增 v1.1.0
 - `references/` - 学习资料（最佳实践、设计模式）
 - `PROJECT_COMPLETION_REPORT.md` - 完整的项目总结
@@ -214,5 +210,4 @@ Internal Use Only - Anthropic
 - [测试报告](./test-configs/AUTO_GATE_TEST_REPORT.md) ← 新增 v1.1.0
 - [完整示例](./ontology-builder/examples/equipment-monitoring-example.md)
 - [常见陷阱](./ontology-builder/references/gotchas.md)
-- [TDD测试文档](./docs/TESTING.md)
 - [学习资料](./references/)

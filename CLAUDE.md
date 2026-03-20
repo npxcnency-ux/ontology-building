@@ -143,8 +143,7 @@
 ```
 
 **预防措施**:
-1. ✅ 在VERIFICATION.md添加"功能完整性检查"
-2. ✅ 使用验证脚本检查所有承诺的文件是否存在：
+1. ✅ 使用验证脚本检查所有承诺的文件是否存在：
    ```bash
    grep -o "examples/[a-z-]*.md" SKILL.md | while read file; do
      [ -f "$file" ] && echo "✅ $file" || echo "❌ 缺失: $file"
@@ -382,7 +381,6 @@ ontology-builder/
 │   └── equipment-monitoring-example.md
 │
 └── 项目文档/
-    ├── VERIFICATION.md         # 验证清单（240行）
     ├── PROJECT_SUMMARY.md      # 项目总结
     ├── BUG_FIX_RECORD.md       # Bug修复记录
     └── CLAUDE.md               # 本文件
@@ -393,7 +391,7 @@ ontology-builder/
 1. **Skill主文件**: 必须命名为 `SKILL.md`
 2. **参考指南**: 使用 `{concept}-guide.md` 格式
 3. **示例文件**: 使用 `{scenario}-example.md` 格式
-4. **项目文档**: 使用全大写（README.md, VERIFICATION.md）
+4. **项目文档**: 使用全大写（README.md, CLAUDE.md）
 
 ---
 
@@ -613,8 +611,6 @@ references/: 详细规则独立文件（6个文件，2,002行）
 - ✅ CLAUDE.md（项目记忆）
 - ✅ README.md（项目说明）
 - ✅ docs/CLEANUP_REPORT.md（清理记录）
-- ✅ docs/TESTING.md（TDD测试文档）
-- ✅ docs/VERIFICATION.md（验证清单）
 
 **实际案例**（本项目）:
 ```bash
@@ -622,7 +618,7 @@ references/: 详细规则独立文件（6个文件，2,002行）
 删除了6个中间态文件：
 - TASK_7_FIX_REPORT.md → 内容已整合到CLAUDE.md Gotcha #3
 - TASK_9_COMPLETION_REPORT.md → 内容已整合到PROJECT_COMPLETION_REPORT.md
-- TDD_COMPLETION_REPORT.md → 内容已整合到docs/TESTING.md
+- TDD_COMPLETION_REPORT.md → 内容已整合到CLAUDE.md
 - SKILL_VERIFICATION_REPORT.md → 内容已整合到PROJECT_COMPLETION_REPORT.md
 - BUG_FIX_RECORD.md → 内容已整合到CLAUDE.md Gotcha #1
 - PROJECT_SUMMARY.md → 被PROJECT_COMPLETION_REPORT.md替代
@@ -699,9 +695,6 @@ references/: 详细规则独立文件（6个文件，2,002行）
 
 3. **更新相关的reference文件**
    - 在对应的guide中增加相关说明
-
-4. **更新 `VERIFICATION.md`**
-   - 如果需要新的检查项
 
 ---
 
