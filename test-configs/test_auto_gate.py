@@ -15,8 +15,10 @@ class AutoGateValidator:
         self.p1_issues = []
         self.p2_issues = []
 
-    def load_config(self, file_path: str) -> Dict:
+    def load_config(self, file_path) -> Dict:
         """加载YAML配置文件"""
+        # 支持str和Path对象
+        file_path = Path(file_path) if not isinstance(file_path, Path) else file_path
         with open(file_path, 'r', encoding='utf-8') as f:
             return yaml.safe_load(f)
 
@@ -216,9 +218,11 @@ class AutoGateValidator:
                     f"[P2-4] 建议为Function '{func_name}' 添加usageScenarios说明"
                 )
 
-    def validate(self, file_path: str) -> Tuple[bool, str]:
+    def validate(self, file_path) -> Tuple[bool, str]:
         """执行完整验证"""
         try:
+            # 支持str和Path对象
+            file_path = Path(file_path) if not isinstance(file_path, Path) else file_path
             config = self.load_config(file_path)
 
             # 执行三级检查
@@ -237,12 +241,14 @@ class AutoGateValidator:
         except Exception as e:
             return False, f"❌ 配置文件解析失败: {str(e)}"
 
-    def generate_report(self, file_path: str) -> str:
+    def generate_report(self, file_path) -> str:
         """生成测试报告"""
+        # 支持str和Path对象
+        file_path = Path(file_path) if not isinstance(file_path, Path) else file_path
         lines = []
         lines.append("=" * 80)
         lines.append(f"自动门禁测试报告")
-        lines.append(f"配置文件: {Path(file_path).name}")
+        lines.append(f"配置文件: {file_path.name}")
         lines.append("=" * 80)
         lines.append("")
 
@@ -289,12 +295,16 @@ class AutoGateValidator:
 
 def main():
     """主函数"""
-    # 测试4个现有配置文件
+    # 获取项目根目录（脚本所在目录的上一级）
+    script_dir = Path(__file__).parent
+    project_root = script_dir.parent
+
+    # 测试4个现有配置文件（使用绝对路径）
     test_files = [
-        "../vehicle-service-ontology-config.yaml",
-        "../vehicle-ontology-config.yaml",
-        "../technician-ontology-config.yaml",
-        "../parts-ontology-config.yaml"
+        project_root / "vehicle-service-ontology-config.yaml",
+        project_root / "vehicle-ontology-config.yaml",
+        project_root / "technician-ontology-config.yaml",
+        project_root / "parts-ontology-config.yaml"
     ]
 
     print("\n🚦 开始自动门禁测试\n")
