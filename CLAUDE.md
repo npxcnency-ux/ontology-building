@@ -22,11 +22,10 @@ ontology-building/
 
 ## 部署位置
 
-- **Skill 源码**: `ontology-building/ontology-builder/`
-- **Skill 部署**: `~/.claude/skills/ontology-builder/`（从源码复制）
+- **Skill 源码 & 部署**: `~/.claude/skills/ontology-builder/` → 符号链接到 `ontology-building/ontology-builder/`
 - **评估工作区**: `~/.claude/skills/ontology-builder-workspace/`（不在 git 中）
 
-修改 skill 时，编辑 `~/.claude/skills/ontology-builder/` 中的文件，测试通过后用 `cp` 同步回 repo。
+修改 skill 时直接编辑仓库代码，符号链接确保部署端自动生效，无需手动同步。
 
 ## Skill 核心设计
 
