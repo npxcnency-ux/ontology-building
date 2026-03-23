@@ -2,7 +2,7 @@
 
 ## 项目概述
 
-本项目包含一个 Claude Code Skill（`ontology-builder`），用于通过交互式对话引导用户构建 Palantir 本体配置。
+本项目包含一个 Claude Code Skill（`ontology-builder`），用于通过交互式对话引导用户构建本体配置。
 
 ## 项目结构
 

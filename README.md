@@ -1,10 +1,10 @@
 # Ontology Building Project
 
-企业级本体构建工具集，帮助非技术人员通过交互式对话将业务概念转化为结构化的 Palantir 本体配置。
+企业级本体构建工具集，帮助非技术人员通过交互式对话将业务概念转化为结构化的本体配置。
 
 ## Ontology Builder Skill
 
-一个 Claude Code Skill，通过 5 阶段渐进式引导构建完整的 Palantir 本体配置。
+一个 Claude Code Skill，通过 5 阶段渐进式引导构建完整的本体配置。
 
 **核心特点：**
 - 对话式交互，无需技术背景
@@ -34,7 +34,7 @@ cp -r ontology-builder ~/.claude/skills/
 
 - 为业务对象建模（设备、供应商、订单、客户等）
 - 配置自动化业务流程（异常响应、审批流程、定时任务）
-- 生成符合 Palantir 标准的本体配置文件
+- 生成符合行业最佳实践的本体配置文件
 
 ## 项目结构
 
@@ -64,7 +64,7 @@ ontology-building/
 
 ## 设计原则
 
-1. **Palantir 本体四要素**: Property → Function → Action → Automation
+1. **本体四要素**: Property → Function → Action → Automation
 2. **Claude Code Skill 最佳实践**: 渐进式资料加载、Gotchas 驱动、内置示例
 3. **ADK 设计模式**: Inversion（先理解需求）+ Pipeline（强制完整流程）
 

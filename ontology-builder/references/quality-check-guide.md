@@ -295,12 +295,10 @@ preconditions:
 **示例**:
 ```python
 # ❌ 没有异常处理
-@function
 def calculate_utilization(device: Device) -> float:
     return device.running_time / device.total_time
 
 # ✅ 有异常处理
-@function
 def calculate_utilization(device: Device) -> float:
     if device.total_time is None or device.total_time == 0:
         return 0.0

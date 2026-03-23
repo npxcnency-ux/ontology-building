@@ -1,6 +1,6 @@
 # Ontology Builder - 企业本体构建助手
 
-一个 Claude Code Skill，帮助非技术人员通过交互式对话将业务概念转化为 Palantir 本体配置。
+一个 Claude Code Skill，帮助非技术人员通过交互式对话将业务概念转化为结构化的本体配置。
 
 ## 核心特点
 
@@ -79,7 +79,7 @@ cp -r ontology-builder ~/.claude/skills/
 ```
 
 ### 触发关键词
-本体建模、ontology、object type、业务对象、数据建模、配置生成、建模、Palantir 配置
+本体建模、ontology、object type、业务对象、数据建模、配置生成、建模、本体配置
 
 ## 质量检查
 

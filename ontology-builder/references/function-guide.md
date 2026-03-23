@@ -215,7 +215,7 @@ Function应该主要依赖对象自身的属性，避免复杂的跨对象查询
 **A**: 不可以！Function是只读的。如果需要修改数据，必须用Action（操作）。
 
 ### Q3: Function的计算会很慢吗？
-**A**: 简单的判断和计算非常快（毫秒级）。如果Function涉及复杂查询或大量数据，可能会慢一些，但这是Palantir平台会自动优化的。
+**A**: 简单的判断和计算非常快（毫秒级）。如果Function涉及复杂查询或大量数据，可能会慢一些，但平台会自动优化。
 
 ### Q4: 我可以在Function里调用外部API吗？
 **A**: 理论上可以，但不推荐。Function应该是"纯计算"，复杂的外部调用应该放在Automation中。
@@ -316,10 +316,9 @@ Function不仅用于Automation触发，还可以作为Action的**前置条件校
 
 ### 生成配置时转为Python
 
-最终输出的 `ontology-config.yaml` 中，Function的logic字段应为**Palantir Functions Python代码框架**：
+最终输出的 `ontology-config.yaml` 中，Function的logic字段应为**Python代码框架**：
 
 ```python
-@function
 def device_temperature_risk_level(device: Device) -> str:
     """设备温度风险等级判断"""
     temperature = device.temperature
@@ -350,4 +349,4 @@ def device_temperature_risk_level(device: Device) -> str:
 - **对话阶段**不要展示Python代码，用伪代码即可——目标用户是业务白领
 - **生成配置时**自动将伪代码转为Python，无需用户干预
 - 每个Function都要加入空值容错（`if field is None`）
-- 函数名使用 snake_case，与Palantir Functions SDK规范一致
+- 函数名使用 snake_case，与通用编码规范一致
