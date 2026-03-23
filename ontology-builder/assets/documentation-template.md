@@ -179,16 +179,33 @@
 ---
 {{/each}}
 
-## 5. 业务流程示意图
+## 5. 对象关联关系（Links）
+
+本对象与其他业务对象的关联关系。
+
+{{#each links}}
+### 5.{{@index}}. {{display_name}}
+- **关联对象**: {{target_object_type}}
+- **关系类型**: {{link_type}}（一对一/一对多/多对多）
+- **业务含义**: {{description}}
+{{#if cascading_behavior}}
+- **级联行为**: {{cascading_behavior}}
+{{/if}}
+
+{{/each}}
+
+---
+
+## 6. 业务流程示意图
 
 {{flow_diagram}}
 
 ---
 
-## 6. 典型使用场景
+## 7. 典型使用场景
 
 {{#each use_case_scenarios}}
-### 场景{{@index}}: {{scenario_name}}
+### 7.{{@index}}. {{scenario_name}}
 
 **情况**: {{situation}}
 
@@ -202,7 +219,7 @@
 ---
 {{/each}}
 
-## 7. 部署检查清单
+## 8. 部署检查清单
 
 在将此配置部署到Palantir平台前,请确认以下事项:
 
@@ -216,7 +233,7 @@
 
 ---
 
-## 8. 后续优化建议
+## 9. 后续优化建议
 
 {{#if optimization_suggestions}}
 {{#each optimization_suggestions}}

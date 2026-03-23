@@ -43,3 +43,6 @@ temp/
 
 # references
 内部创建本体最佳实践.md
+
+.claude/
+ontology-builder-workspace/

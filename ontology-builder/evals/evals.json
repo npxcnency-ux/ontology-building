@@ -1,0 +1,86 @@
+{
+  "skill_name": "ontology-builder",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "我们公司要管理会议室，想建一个系统来跟踪会议室的使用情况，帮我配置一下",
+      "expected_output": "按5阶段引导用户完成会议室管理本体配置，输出YAML和文档",
+      "files": [],
+      "assertions": [
+        {"id": "yaml-generated", "text": "生成了 ontology-config.yaml 文件", "type": "file_exists"},
+        {"id": "doc-generated", "text": "生成了 ontology-documentation.md 文件", "type": "file_exists"},
+        {"id": "has-properties-3plus", "text": "YAML中包含至少3个Property定义", "type": "content_check"},
+        {"id": "has-primary-key", "text": "YAML中定义了primaryKey", "type": "content_check"},
+        {"id": "has-actions", "text": "YAML中包含至少1个Action", "type": "content_check"},
+        {"id": "has-functions", "text": "YAML中包含至少1个Function", "type": "content_check"},
+        {"id": "has-automations", "text": "YAML中包含至少1个Automation", "type": "content_check"},
+        {"id": "actions-have-permissions", "text": "所有Action都有permissions配置", "type": "content_check"},
+        {"id": "no-tech-jargon", "text": "对话记录中使用业务语言而非技术术语(Property/Function等)", "type": "transcript_check"},
+        {"id": "five-stage-flow", "text": "对话记录显示5阶段逐步引导结构", "type": "transcript_check"},
+        {"id": "high-risk-action-confirmation", "text": "高危Action(如删除)有confirmationRequired", "type": "content_check"},
+        {"id": "automation-rate-limiting", "text": "Automation有限流保护配置", "type": "content_check"},
+        {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，识别出至少2个业务对象", "type": "transcript_check"},
+        {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
+        {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
+        {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "我是供应链经理，需要建一个供应商管理的本体。我们有200多家供应商，需要跟踪他们的交付表现、质量合格率、合同状态。还想实现供应商自动评级和风险预警。",
+      "expected_output": "引导完成供应商管理本体，包含交付/质量/合同字段、评级Function、预警Automation",
+      "files": [],
+      "assertions": [
+        {"id": "yaml-generated", "text": "生成了 ontology-config.yaml 文件", "type": "file_exists"},
+        {"id": "doc-generated", "text": "生成了 ontology-documentation.md 文件", "type": "file_exists"},
+        {"id": "has-properties-3plus", "text": "YAML中包含至少3个Property定义", "type": "content_check"},
+        {"id": "has-primary-key", "text": "YAML中定义了primaryKey", "type": "content_check"},
+        {"id": "has-actions", "text": "YAML中包含至少1个Action", "type": "content_check"},
+        {"id": "has-functions", "text": "YAML中包含至少1个Function", "type": "content_check"},
+        {"id": "has-automations", "text": "YAML中包含至少1个Automation", "type": "content_check"},
+        {"id": "actions-have-permissions", "text": "所有Action都有permissions配置", "type": "content_check"},
+        {"id": "no-tech-jargon", "text": "对话记录中使用业务语言而非技术术语", "type": "transcript_check"},
+        {"id": "five-stage-flow", "text": "对话记录显示5阶段逐步引导结构", "type": "transcript_check"},
+        {"id": "has-risk-rating-function", "text": "包含供应商风险评级的Function(用户明确要求)", "type": "content_check"},
+        {"id": "has-risk-alert-automation", "text": "包含风险预警的Automation(用户明确要求)", "type": "content_check"},
+        {"id": "delivery-quality-fields", "text": "包含交付表现和质量合格率相关字段", "type": "content_check"},
+        {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，识别出至少2个业务对象(如供应商、产品、合同等)", "type": "transcript_check"},
+        {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
+        {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
+        {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "我们工厂有一套设备巡检流程，巡检员每天拿pad去现场检查，需要记录设备状态、拍照、填巡检表。如果发现异常要自动生成工单并通知维修组长。巡检计划是每周排的，不同设备巡检频率不一样。帮我把这个建成本体配置。",
+      "expected_output": "引导完成巡检管理本体，识别多个对象（设备、巡检记录、工单等），生成多对象配置",
+      "files": [],
+      "assertions": [
+        {"id": "yaml-generated", "text": "生成了 ontology-config.yaml 文件", "type": "file_exists"},
+        {"id": "doc-generated", "text": "生成了 ontology-documentation.md 文件", "type": "file_exists"},
+        {"id": "has-properties-3plus", "text": "YAML中包含至少3个Property定义", "type": "content_check"},
+        {"id": "has-primary-key", "text": "YAML中定义了primaryKey", "type": "content_check"},
+        {"id": "has-actions", "text": "YAML中包含至少1个Action", "type": "content_check"},
+        {"id": "has-functions", "text": "YAML中包含至少1个Function", "type": "content_check"},
+        {"id": "has-automations", "text": "YAML中包含至少1个Automation", "type": "content_check"},
+        {"id": "actions-have-permissions", "text": "所有Action都有permissions配置", "type": "content_check"},
+        {"id": "no-tech-jargon", "text": "对话记录中使用业务语言而非技术术语", "type": "transcript_check"},
+        {"id": "five-stage-flow", "text": "对话记录显示5阶段逐步引导结构", "type": "transcript_check"},
+        {"id": "has-auto-work-order", "text": "包含异常自动生成工单的Automation(用户明确要求)", "type": "content_check"},
+        {"id": "has-notification", "text": "包含通知维修组长的机制(用户明确要求)", "type": "content_check"},
+        {"id": "inspection-schedule-fields", "text": "包含巡检计划/频率相关字段", "type": "content_check"},
+        {"id": "multi-object-types", "text": "YAML中定义了至少3个objectType(如设备、巡检记录、工单等)", "type": "content_check"},
+        {"id": "has-links", "text": "YAML中定义了至少3个Link关联关系(对象之间有明确关系)", "type": "content_check"},
+        {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，识别出至少3个业务对象", "type": "transcript_check"},
+        {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
+        {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"}
+      ]
+    }
+  ]
+}

@@ -172,6 +172,36 @@ Function应该主要依赖对象自身的属性，避免复杂的跨对象查询
   执行正常判断逻辑
 ```
 
+### 技巧5：考虑Function的复用性
+同一个计算逻辑可能在多个地方使用——界面展示、Automation触发条件、Action前置校验。设计时考虑通用性：
+
+```
+❌ 不好：为每个场景写一个独立Function
+  - "首页显示的设备风险等级"
+  - "Automation用的设备风险等级"
+  - "报表里的设备风险等级"
+  → 三个Function逻辑相同，维护三份
+
+✅ 好：设计一个通用Function，多处调用
+  - "设备温度风险等级"（通用）
+    → 首页卡片显示 ✓
+    → Automation触发条件 ✓
+    → Action前置校验 ✓
+    → 报表统计 ✓
+```
+
+**跨对象复用**：如果多个对象有相似的计算需求，可以抽象为通用模式：
+```
+通用模式："逾期判断"
+  输入：当前日期、截止日期、状态
+  逻辑：如果状态≠已完成 且 当前日期>截止日期 → "逾期X天"
+
+可复用于：
+  - 工单逾期判断（工单截止日期）
+  - 订单逾期判断（交付日期）
+  - 合同逾期判断（合同到期日）
+```
+
 ---
 
 ## 常见问题
@@ -224,11 +254,12 @@ Function应该主要依赖对象自身的属性，避免复杂的跨对象查询
 ┌─────────────┐
 │  Function   │ (计算规则：温度风险 = 高)
 └──────┬──────┘
-       │ 触发
+       │ 触发 / 校验
        ↓
-┌─────────────┐
-│ Automation  │ (自动化：检测到高风险)
-└──────┬──────┘
+┌─────────────┐     ┌─────────────┐
+│ Automation  │     │   Action    │
+│ (触发条件)  │     │ (前置校验)  │
+└──────┬──────┘     └─────────────┘
        │ 执行
        ↓
 ┌─────────────┐
@@ -237,3 +268,86 @@ Function应该主要依赖对象自身的属性，避免复杂的跨对象查询
 ```
 
 Function是连接"数据感知"和"自动响应"的桥梁！
+
+### Function作为Action的校验器
+
+Function不仅用于Automation触发，还可以作为Action的**前置条件校验器**——在用户执行操作前，用Function判断是否允许执行。
+
+```
+示例1：启动设备前的安全校验
+
+  Action: 启动设备
+  前置校验（调用Function）:
+    - Function"设备温度风险等级" ≠ "高风险"
+    - Function"设备是否在线" = "在线"
+
+  ✅ 两个校验都通过 → 允许启动
+  ❌ 任一校验失败 → 按钮灰色，提示原因
+
+示例2：批量调价前的风险校验
+
+  Action: 批量调价
+  前置校验（调用Function）:
+    - Function"调价影响范围评估" → 返回影响产品数
+    - 如果影响 > 100个产品 → 需要额外审批
+
+好处：
+  - 校验逻辑集中在Function中，统一维护
+  - Action只管"做什么"，Function管"能不能做"
+  - 同一个Function可以被多个Action复用
+```
+
+---
+
+## 从伪代码到Python代码
+
+### 对话中使用伪代码
+
+在对话引导阶段，Function逻辑用**中文伪代码**描述，让业务用户能理解和确认：
+
+```
+如果 当前温度 > 温度标准：
+  返回 "高风险"
+否则如果 当前温度 > 温度标准 × 0.8：
+  返回 "中风险"
+否则：
+  返回 "低风险"
+```
+
+### 生成配置时转为Python
+
+最终输出的 `ontology-config.yaml` 中，Function的logic字段应为**Palantir Functions Python代码框架**：
+
+```python
+@function
+def device_temperature_risk_level(device: Device) -> str:
+    """设备温度风险等级判断"""
+    temperature = device.temperature
+    threshold = device.temperature_threshold
+
+    if temperature is None or threshold is None:
+        return "数据不足，无法判断"
+
+    if temperature > threshold:
+        return "高风险"
+    elif temperature > threshold * 0.8:
+        return "中风险"
+    else:
+        return "低风险"
+```
+
+### 转换规则
+
+| 伪代码 | Python代码 |
+|--------|-----------|
+| 如果...否则如果...否则 | if...elif...else |
+| 返回 "xxx" | return "xxx" |
+| 字段A × 0.5 + 字段B × 0.3 | field_a * 0.5 + field_b * 0.3 |
+| 数据为空 | field is None |
+
+### 注意事项
+
+- **对话阶段**不要展示Python代码，用伪代码即可——目标用户是业务白领
+- **生成配置时**自动将伪代码转为Python，无需用户干预
+- 每个Function都要加入空值容错（`if field is None`）
+- 函数名使用 snake_case，与Palantir Functions SDK规范一致
