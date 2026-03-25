@@ -41,8 +41,11 @@ temp/
 # Claude Code generated
 .claude/local/
 
-# references
-内部创建本体最佳实践.md
+# docs
+docs/
 
 .claude/
+
 ontology-builder-workspace/
+
+.playwright-mcp/

@@ -81,6 +81,93 @@
         {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
         {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"}
       ]
+    },
+    {
+      "id": 4,
+      "prompt": "我们公司的采购流程比较复杂，一个采购申请要经过好几道审批：部门主管审批、采购经理审核、5万以上要财务总监审批、20万以上还要总经理签字。申请通过后要生成采购订单发给供应商，到货后还要做验收入库。目前这些都是纸质表单或邮件来回，经常有丢失的情况，审批也慢，而且金额超标了有时候没走对应的审批流程。帮我建一个采购管理的本体。",
+      "expected_output": "引导完成采购管理本体，包含复杂状态机（7+状态转换）、多层审批操作按钮（含金额阈值前置条件）、验收流程",
+      "files": [],
+      "assertions": [
+        {"id": "yaml-generated", "text": "生成了 ontology-config.yaml 文件", "type": "file_exists"},
+        {"id": "doc-generated", "text": "生成了 ontology-documentation.md 文件", "type": "file_exists"},
+        {"id": "has-properties-3plus", "text": "YAML中包含至少3个Property定义", "type": "content_check"},
+        {"id": "has-primary-key", "text": "YAML中定义了primaryKey", "type": "content_check"},
+        {"id": "has-actions", "text": "YAML中包含至少1个Action", "type": "content_check"},
+        {"id": "has-functions", "text": "YAML中包含至少1个Function", "type": "content_check"},
+        {"id": "has-automations", "text": "YAML中包含至少1个Automation", "type": "content_check"},
+        {"id": "actions-have-permissions", "text": "所有Action都有permissions配置", "type": "content_check"},
+        {"id": "no-tech-jargon", "text": "对话记录中使用业务语言而非技术术语", "type": "transcript_check"},
+        {"id": "five-stage-flow", "text": "对话记录显示5阶段逐步引导结构", "type": "transcript_check"},
+        {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，识别出至少3个业务对象（如采购申请、采购订单、供应商等）", "type": "transcript_check"},
+        {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
+        {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
+        {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"},
+        {"id": "has-status-enum-5plus", "text": "核心对象包含状态字段，且枚举值≥5个（如待提交/待部门审批/待采购审核/待财务审批/待总经理审批/已通过/已驳回等）", "type": "content_check"},
+        {"id": "has-multi-level-approval-actions", "text": "包含至少2个不同层级的审批操作按钮（如部门审批、采购审核、财务审批中的至少2个）", "type": "content_check"},
+        {"id": "has-amount-threshold-function", "text": "包含基于金额判断审批层级或审批路径的计算规则（用户明确描述了5万/20万的金额阈值）", "type": "content_check"},
+        {"id": "approval-preconditions-sequential", "text": "审批操作按钮的前置条件体现了顺序依赖（如财务审批要求采购经理已审核通过），且前置条件引用的状态值在状态枚举中存在", "type": "content_check"},
+        {"id": "has-receipt-action", "text": "包含验收入库相关的操作按钮或自动化规则（用户明确要求到货验收）", "type": "content_check"},
+        {"id": "has-reject-action", "text": "包含驳回操作按钮（多层审批流程中任一层级可驳回是基本需求）", "type": "content_check"}
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "我负责公司的培训管理，现在用Excel跟踪特别混乱。情况是这样的：我们有内训和外训两种课程，每个员工可以报名多门课程，一门课程也有多个学员。有些岗位有资质证书要求（比如电工证、安全员证），证书到期前要安排复训。每季度要汇总各部门的培训学时，年底要导出数据到HR系统做年度考核。帮我设计一下这个培训管理的本体配置。",
+      "expected_output": "引导完成培训管理本体，正确处理多对多关系（员工↔课程）、定时汇总学时、证书到期提醒、HR系统数据导出",
+      "files": [],
+      "assertions": [
+        {"id": "yaml-generated", "text": "生成了 ontology-config.yaml 文件", "type": "file_exists"},
+        {"id": "doc-generated", "text": "生成了 ontology-documentation.md 文件", "type": "file_exists"},
+        {"id": "has-properties-3plus", "text": "YAML中包含至少3个Property定义", "type": "content_check"},
+        {"id": "has-primary-key", "text": "YAML中定义了primaryKey", "type": "content_check"},
+        {"id": "has-actions", "text": "YAML中包含至少1个Action", "type": "content_check"},
+        {"id": "has-functions", "text": "YAML中包含至少1个Function", "type": "content_check"},
+        {"id": "has-automations", "text": "YAML中包含至少1个Automation", "type": "content_check"},
+        {"id": "actions-have-permissions", "text": "所有Action都有permissions配置", "type": "content_check"},
+        {"id": "no-tech-jargon", "text": "对话记录中使用业务语言而非技术术语", "type": "transcript_check"},
+        {"id": "five-stage-flow", "text": "对话记录显示5阶段逐步引导结构", "type": "transcript_check"},
+        {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，识别出至少3个业务对象（如课程、报名记录/培训记录、员工、证书等）", "type": "transcript_check"},
+        {"id": "has-links", "text": "YAML中定义了至少2个Link关联关系", "type": "content_check"},
+        {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
+        {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"},
+        {"id": "has-many-to-many-handling", "text": "对话或YAML中正确处理了员工与课程的多对多关系——通过中间对象（如报名记录/培训记录）拆解，而非直接定义多对多Link", "type": "content_check"},
+        {"id": "has-scheduled-aggregation", "text": "包含定时汇总培训学时的自动化规则（用户明确要求每季度汇总）", "type": "content_check"},
+        {"id": "scheduled-uses-query-not-callfunction", "text": "定时汇总类自动化规则的workflow中，数据聚合步骤使用query类型而非callFunction（不引用未定义的聚合函数）", "type": "content_check"},
+        {"id": "has-certificate-expiry-fields", "text": "包含资质证书有效期或到期日期相关字段（用户明确要求证书到期管理）", "type": "content_check"},
+        {"id": "has-certificate-reminder-automation", "text": "包含证书到期前自动提醒的自动化规则（用户明确要求到期前安排复训）", "type": "content_check"},
+        {"id": "has-external-system-sync", "text": "配置中提及或包含了与HR系统的数据导出/同步机制（用户明确要求年底导出到HR系统）", "type": "content_check"}
+      ]
+    },
+    {
+      "id": 6,
+      "prompt": "我们想管一下客户，就是客户信息啊、跟进记录什么的。然后销售那边也需要管商机，有的客户可能还有售后服务需求。具体要做成什么样我也还没想好，你先帮我看看怎么弄？",
+      "expected_output": "面对模糊需求，skill应主动提问澄清（而非脑补详细需求），引导用户逐步明确需求后再建模，最终输出合理的客户管理本体",
+      "files": [],
+      "assertions": [
+        {"id": "yaml-generated", "text": "生成了 ontology-config.yaml 文件", "type": "file_exists"},
+        {"id": "doc-generated", "text": "生成了 ontology-documentation.md 文件", "type": "file_exists"},
+        {"id": "has-properties-3plus", "text": "YAML中包含至少3个Property定义", "type": "content_check"},
+        {"id": "has-primary-key", "text": "YAML中定义了primaryKey", "type": "content_check"},
+        {"id": "has-actions", "text": "YAML中包含至少1个Action", "type": "content_check"},
+        {"id": "has-automations", "text": "YAML中包含至少1个Automation", "type": "content_check"},
+        {"id": "actions-have-permissions", "text": "所有Action都有permissions配置", "type": "content_check"},
+        {"id": "no-tech-jargon", "text": "对话记录中使用业务语言而非技术术语", "type": "transcript_check"},
+        {"id": "five-stage-flow", "text": "对话记录显示5阶段逐步引导结构", "type": "transcript_check"},
+        {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，区分了客户、商机、跟进记录等不同对象", "type": "transcript_check"},
+        {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
+        {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
+        {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"},
+        {"id": "asks-clarifying-questions", "text": "对话记录显示助手在收到模糊需求后主动提出了澄清问题（如询问公司行业/规模、客户管理的具体痛点、销售和售后的关系等），而非直接假设需求开始建模", "type": "transcript_check"},
+        {"id": "distinguishes-sales-vs-aftersales", "text": "对话中明确区分了销售（商机管理）和售后服务这两条业务线，引导用户确认核心对象而非把所有需求混为一体", "type": "transcript_check"},
+        {"id": "user-confirmed-each-stage", "text": "对话记录中每个阶段转换前都有用户确认步骤，没有因为需求模糊而跳过确认直接推进", "type": "transcript_check"},
+        {"id": "no-over-engineering", "text": "最终YAML配置的复杂度与用户实际确认的需求匹配——没有在用户未确认的情况下自行添加大量复杂的计算规则和自动化规则", "type": "content_check"}
+      ]
     }
   ]
 }
