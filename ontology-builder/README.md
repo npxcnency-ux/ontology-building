@@ -25,7 +25,7 @@ ontology-builder/
 │   ├── links-guide.md                # 对象关联关系
 │   ├── stage-guide.md                # 详细引导问题（Q1-Q19b）
 │   ├── quality-check-guide.md        # 质量检查（25项）
-│   └── gotchas.md                    # 常见陷阱（25个，含大规模建模心得）
+│   └── gotchas.md                    # 常见陷阱（24个，含大规模建模心得）
 ├── assets/                           # 模板资源
 │   ├── ontology-template.yaml        # YAML 配置模板
 │   └── documentation-template.md     # 文档模板
