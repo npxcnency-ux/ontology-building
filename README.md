@@ -50,7 +50,7 @@ ontology-building/
 │   │   ├── links-guide.md         # 对象关联关系指南
 │   │   ├── stage-guide.md         # 详细引导问题（Q1-Q19b）
 │   │   ├── quality-check-guide.md # 质量检查指南（25项）
-│   │   └── gotchas.md             # 常见陷阱（20个）
+│   │   └── gotchas.md             # 常见陷阱（28个）
 │   ├── assets/                    # 模板资源
 │   │   ├── ontology-template.yaml # YAML 配置模板
 │   │   └── documentation-template.md

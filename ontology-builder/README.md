@@ -5,19 +5,21 @@
 ## 核心特点
 
 - **对话式交互**: 逐步提问引导，无需技术背景
-- **5 阶段渐进引导**: 每阶段有检查点，确认后才进入下一阶段
+- **5 阶段渐进引导**: 每阶段有增量验证检查点，确认后才进入下一阶段
 - **业务语言**: 用"数据字段"、"计算规则"、"操作按钮"替代技术术语
 - **三级质量门禁**: P0/P1/P2 共 25 项自动检查
-- **多对象支持**: 核心对象完整配置 + 关联对象骨架
+- **多对象支持**: 核心对象完整配置 + 关联对象骨架，YAML 使用 `objectTypes:` 数组格式
 - **双输出**: YAML 技术配置 + Markdown 业务文档
-- **交叉引用完整性**: 生成前自动校验所有 Function/Action/Property 引用
+- **交叉引用完整性**: 生成前构建三张清单（Property/Action/Function apiName），逐条比对确保无悬空引用
+- **跨阶段修改**: 用户可在后续阶段回退修改前面阶段的内容，系统按级联影响表自动重新验证
+- **中途保存与恢复**: JSON 快照支持跨会话断点续建
 
 ## Skill 结构
 
 ```
 ontology-builder/
-├── SKILL.md                          # 主文件（交互引导逻辑）
-├── references/                       # 参考指南
+├── SKILL.md                          # 主文件（~410行，交互引导逻辑）
+├── references/                       # 参考指南（8个）
 │   ├── property-guide.md             # 数据字段类型
 │   ├── function-guide.md             # 计算规则
 │   ├── action-guide.md               # 操作按钮
@@ -25,74 +27,89 @@ ontology-builder/
 │   ├── links-guide.md                # 对象关联关系
 │   ├── stage-guide.md                # 详细引导问题（Q1-Q19b）
 │   ├── quality-check-guide.md        # 质量检查（25项）
-│   └── gotchas.md                    # 常见陷阱（24个，含大规模建模心得）
+│   └── gotchas.md                    # 常见陷阱（28个，含大规模建模+本体扩展心得）
 ├── assets/                           # 模板资源
 │   ├── ontology-template.yaml        # YAML 配置模板
 │   └── documentation-template.md     # 文档模板
 ├── examples/                         # 完整示例
 │   └── equipment-monitoring-example.md
-└── evals/                            # 评估用例
+└── evals/                            # 评估用例（6个场景）
     └── evals.json
 ```
 
 ## 五阶段构建流程
 
+```
+阶段一          阶段二            阶段三          阶段四          阶段五          输出
+业务场景  →  数据字段+关联  →  计算规则  →  操作按钮  →  自动化规则  →  YAML+文档
+对象全景图      Property          Function        Action         Automation      质量门禁
+              + Link                            + 权限/前置条件  + 限流/错误处理  交叉引用校验
+```
+
 ### 阶段一: 理解业务场景与对象全景
-- 识别核心业务对象和关联对象
-- 绘制对象全景图
-- 确定建模优先级
+- 识别核心业务对象和关联对象（通常 3-6 个）
+- 绘制对象全景图（ASCII 图 + 关系说明）
+- 确定建模优先级和顺序
 
 ### 阶段二: 定义数据字段与对象关联
-- 固定信息、变化信息、历史追踪分类
-- 数据来源（人工录入/外部同步/系统生成）
-- 对象关联关系和级联行为
+- 固定属性、变化属性、时序属性分类
+- 数据来源标注（人工录入 / 外部同步 / 系统生成）
+- 对象关联关系（一对一/一对多/多对多）和级联行为
+- **增量验证**: P0-3（primaryKey）、P0-1（字段数≥3）、P1-10（至少1个Link）
 
 ### 阶段三: 定义计算规则（Function）
 - 风险判断、状态推断、业务计算
 - Function 是只读的，不修改数据
+- **增量验证**: P1-5（逻辑<100行）、P1-8（空值容错）、P1-11（纯只读）
 
 ### 阶段四: 定义操作按钮（Action）
 - 创建/更新/删除/自定义操作
-- 权限控制、前置条件、二次确认
-- 回写到外部系统
+- 权限控制、前置条件、二次确认、外部系统回写
+- **增量验证**: P0-2（至少1个Action）、P0-4（权限控制）、P0-5（高危二次确认）、**P0-9（前置条件字段核对）**
 
 ### 阶段五: 定义自动化规则（Automation）
-- 异常响应（事件驱动）
-- 流程编排（Action 触发链）
-- 定时任务（cron 调度）
+- 异常响应（事件驱动）、流程编排（Action 触发链）、定时任务（cron 调度）
 - 限流保护和错误处理
+- **增量验证**: P0-6（Function引用存在）、P0-7（Action引用存在）、P0-8（无循环触发）
 
 ### 输出阶段
-- 交叉引用完整性校验
-- 生成 `ontology-config.yaml` + `ontology-documentation.md`
-- 三级质量门禁检查
+- 构建三张清单，交叉引用完整性校验
+- 生成 `ontology-config.yaml`（核心对象完整 + 关联对象骨架）
+- 生成 `ontology-documentation.md`（业务说明文档）
+- 三级质量门禁最终复核
 
 ## 使用方法
 
 ```bash
-# 安装
-cp -r ontology-builder ~/.claude/skills/
+# 安装（符号链接方式，修改即生效）
+ln -s /path/to/ontology-building/ontology-builder ~/.claude/skills/ontology-builder
 
 # 使用：直接描述业务场景
 # "我们公司要管理会议室，想建一个系统来跟踪使用情况"
 # "我是供应链经理，需要建一个供应商管理的本体"
+# "我们做整车质量预告警，需要从信号采集到效果评估的完整闭环"
 ```
 
 ### 触发关键词
-本体建模、ontology、object type、业务对象、数据建模、配置生成、建模、本体配置
+本体建模、ontology、object type、业务对象、数据建模、配置生成、建模、本体配置、本体构建、对象类型
+
+## 关键设计决策
+
+| 决策 | 说明 | 版本 |
+|------|------|------|
+| `callFunction` vs `query` 步骤类型 | `callFunction` 仅用于调用已定义的 Function；数据查询/聚合使用 `type: query`。防止定时 Automation 生成幽灵函数引用 | v1.3.0 |
+| P0-9 前置条件字段核对前移 | 在阶段四（定义操作按钮时）就检查前置条件引用的字段是否在阶段二中定义过，防止"发明"未定义字段 | v1.4.0 |
+| 跨阶段修改 + 级联重新验证 | 用户可在后续阶段回退修改前面阶段内容，系统按级联影响表自动重新验证受影响的后续阶段 | v1.4.0 |
 
 ## 质量检查
 
 ### P0（阻断级）- 9 项
-- Property 数量 ≥ 3
-- 定义了 primaryKey
-- 至少 1 个 Action
-- 每个 Action 有权限控制
-- 高危 Action 有二次确认
-- Automation 引用的 Function 存在（含 callFunction 步骤检查）
+- Property 数量 ≥ 3、定义了 primaryKey
+- 至少 1 个 Action、每个 Action 有权限控制、高危 Action 有二次确认
+- Automation 引用的 Function 存在（含 workflow 中 callFunction 步骤）
 - Automation 引用的 Action 存在
 - 无循环触发风险
-- Precondition 引用的字段存在
+- **Precondition 引用的字段存在**（最易出错，阶段四前移检查）
 
 ### P1（警告级）- 12 项
 数字字段含单位、必填字段 ≤ 7、业务语言命名、时序属性配置、Function 逻辑简洁、Automation 限流保护、Action 前置条件、Function 异常处理、Links 目标对象存在、核心对象有 Link、Function 只读纯度、外部调用错误处理
@@ -102,26 +119,68 @@ cp -r ontology-builder ~/.claude/skills/
 
 ## Benchmark
 
-v1.3.0 在 3 个测试场景上达到 100% 通过率（57/57 assertions）：
+### v1.4.0 原有场景（65/65, 100%）
 
 | 场景 | 通过率 | 关键验证点 |
 |------|--------|-----------|
 | 会议室管理 | 18/18 | 基础场景，含定时统计报表 |
 | 供应商管理 | 19/19 | 复杂场景，含评级 Function 和风险预警 |
 | 设备巡检 | 20/20 | 多对象场景，含自动工单和通知 |
+| 跨阶段修改 | 8/8 | 回退修改 + 级联重新验证 |
 
-## 常见陷阱（Top 5）
+### v1.4.0 新增压力测试（33/34, 97.1%）
 
+| 场景 | 通过率 | 压力点 |
+|------|--------|--------|
+| 采购审批 | 12/12 | 复杂状态机 + 多层审批 + 前置条件爆炸 |
+| 培训管理 | 11/12 | 多对多关系 + 定时聚合 + 外部系统 |
+| 模糊需求 | 10/10 | 模糊需求澄清 + 不过度建模 |
+
+**with-skill 平均 97.3% vs without-skill 88.3%**
+
+## 实战案例
+
+### 整车质量预告警闭环系统（16 个对象）
+
+最大规模的实战验证，覆盖 **信号采集 → 故障匹配 → 筛选过滤 → 事件生成 → 工单派发 → 效果评估 → 迭代优化** 完整闭环。
+
+```
+感知层:  signalDefinition → atomicCondition → failureCause → faultTreeConfig
+                                                                    ↓
+事件层:  warningEvent ← filterModel                    vehicleBom → 批次聚合
+             ↓
+执行层:  workOrder, cardPushRecord, handlingRecord, annotationRecord
+             ↓
+评估层:  effectivenessMetric → iterationAnalysis
+             ↓
+验证层:  backtestTask, shadowRunTask → 回到感知层（闭环）
+```
+
+产出规模：16 个 objectType、320+ 数据字段、35 个计算规则、60 个操作按钮、31 个自动化规则。
+
+该实战催生了 gotchas #18-#28（大规模建模心得 + 本体扩展心得）。
+
+## 常见陷阱（Top 7）
+
+**初始建模阶段:**
 1. **一开始就追求完美** → 先做 MVP 再迭代
 2. **混淆 Property 和 Function** → 能自动计算的用 Function
-3. **Automation 没有限流** → 必须设置冷却期
-4. **Action 缺少前置条件** → 每个 Action 都要明确执行条件
-5. **定时 Automation 用 callFunction 查询数据** → 数据查询用 `type: query`
+3. **Action 缺少前置条件** → 每个 Action 都要明确执行条件
+4. **定时 Automation 用 callFunction 查询数据** → 数据查询用 `type: query`
 
-详见 `references/gotchas.md`。
+**本体扩展阶段:**
+5. **域专属属性直塞已有对象** → 提取为独立对象 + 枚举区分
+6. **跨实体聚合伪装成单实体聚合** → 聚合轴变化是结构问题
+7. **先列具体值再想结构** → 结构先于实例
 
-## 版本
+详见 `references/gotchas.md`（28 条，分三个层次：单对象 1-17、多对象 18-24、本体扩展 25-28）。
 
-**当前版本**: v1.3.0 (2026-03-23)
+## 版本历史
 
-**最后更新**: 2026-03-23
+| 版本 | 日期 | 关键变更 |
+|------|------|---------|
+| v1.4.0 | 2026-03-25 | 跨阶段修改支持、中途保存恢复、P0-9 前移至阶段四、3 个压力测试场景 |
+| v1.3.0 | 2026-03-23 | callFunction vs query 区分、交叉引用完整性校验、3 个基础测试场景 100% |
+| v1.2.0 | 2026-03-22 | 多对象支持、骨架配置、增量验证 |
+| v1.1.0 | 2026-03-21 | 五阶段引导流程、质量门禁 |
+| v1.0.0 | 2026-03-20 | 初始版本 |
