@@ -52,13 +52,20 @@ ontology-building/
 
 ## Benchmark 评估
 
-使用 skill-creator 框架进行迭代评估，当前 3 个测试场景（会议室管理、供应商管理、设备巡检），共 57 个 assertions。
+使用 skill-creator 框架进行迭代评估，当前 6 个评估场景（4 个基础 + 2 个压力测试 + 1 个模糊需求）。
 
 ### 当前结果（v1.4.0）
+
+原有场景（65/65, 100%）：
 - meeting-room-simple: 18/18 (100%)
 - supplier-management: 19/19 (100%)
 - equipment-inspection: 20/20 (100%)
 - cross-stage-modification: 8/8 (100%)
+
+新增压力测试（33/34, 97.1%）：
+- procurement-approval: 12/12 (100%)
+- training-management: 11/12 (91.7%)
+- vague-requirements: 10/10 (100%)
 
 ## 编码规范
 

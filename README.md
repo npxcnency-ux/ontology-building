@@ -22,8 +22,8 @@
 ## 快速开始
 
 ```bash
-# 复制 skill 到 Claude Code skills 目录
-cp -r ontology-builder ~/.claude/skills/
+# 安装（符号链接方式，修改即生效）
+ln -s /path/to/ontology-building/ontology-builder ~/.claude/skills/ontology-builder
 
 # 在 Claude Code 中使用
 # 直接描述业务场景即可触发，例如：
@@ -89,7 +89,7 @@ ontology-building/
 
 ## 版本信息
 
-### v1.4.0 (2026-03-23) - 当前版本
+### v1.4.0 (2026-03-25) - 当前版本
 
 - 新增跨阶段修改支持：用户可在后续阶段回退修改前面阶段内容，系统按级联影响表自动重新验证
 - 新增中途保存与恢复：JSON 快照支持跨会话继续建模
