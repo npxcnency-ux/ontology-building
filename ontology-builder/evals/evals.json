@@ -17,12 +17,13 @@
         {"id": "actions-have-permissions", "text": "所有Action都有permissions配置", "type": "content_check"},
         {"id": "no-tech-jargon", "text": "对话记录中使用业务语言而非技术术语(Property/Function等)", "type": "transcript_check"},
         {"id": "five-stage-flow", "text": "对话记录显示5阶段逐步引导结构", "type": "transcript_check"},
-        {"id": "high-risk-action-confirmation", "text": "高危Action(如删除)有confirmationRequired", "type": "content_check"},
+        {"id": "risky-action-has-protection", "text": "对状态变更有实质影响的操作按钮（如禁用预约、标记维修、删除）配置了confirmationRequired或严格的precondition，防止误操作", "type": "content_check"},
         {"id": "automation-rate-limiting", "text": "Automation有限流保护配置", "type": "content_check"},
         {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，识别出至少2个业务对象", "type": "transcript_check"},
         {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
         {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-trigger-functions-exist", "text": "event-driven类Automation的trigger中functionResult.functionName引用的Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
         {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"}
       ]
@@ -50,6 +51,7 @@
         {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
         {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-trigger-functions-exist", "text": "event-driven类Automation的trigger中functionResult.functionName引用的Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
         {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"}
       ]
@@ -78,6 +80,7 @@
         {"id": "multi-object-panorama", "text": "对话中展示了对象全景图，识别出至少3个业务对象", "type": "transcript_check"},
         {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-trigger-functions-exist", "text": "event-driven类Automation的trigger中functionResult.functionName引用的Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
         {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"}
       ]
@@ -102,6 +105,7 @@
         {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
         {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-trigger-functions-exist", "text": "event-driven类Automation的trigger中functionResult.functionName引用的Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
         {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"},
         {"id": "has-status-enum-5plus", "text": "核心对象包含状态字段，且枚举值≥5个（如待提交/待部门审批/待采购审核/待财务审批/待总经理审批/已通过/已驳回等）", "type": "content_check"},
@@ -132,6 +136,7 @@
         {"id": "has-links", "text": "YAML中定义了至少2个Link关联关系", "type": "content_check"},
         {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-trigger-functions-exist", "text": "event-driven类Automation的trigger中functionResult.functionName引用的Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
         {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"},
         {"id": "has-many-to-many-handling", "text": "对话或YAML中正确处理了员工与课程的多对多关系——通过中间对象（如报名记录/培训记录）拆解，而非直接定义多对多Link", "type": "content_check"},
@@ -161,6 +166,7 @@
         {"id": "has-links", "text": "YAML中定义了至少1个Link关联关系", "type": "content_check"},
         {"id": "xref-actions-exist", "text": "Automation中callAction引用的所有Action都在YAML的actions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-functions-exist", "text": "Automation中callFunction引用的所有Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
+        {"id": "xref-trigger-functions-exist", "text": "event-driven类Automation的trigger中functionResult.functionName引用的Function都在YAML的functions段中定义过（无悬空引用）", "type": "content_check"},
         {"id": "xref-precondition-fields", "text": "Action的precondition中引用的字段名都在Properties中定义过（无虚构字段）", "type": "content_check"},
         {"id": "naming-consistency", "text": "YAML中apiName使用统一的命名规范（全部camelCase或全部snake_case，不混用）", "type": "content_check"},
         {"id": "asks-clarifying-questions", "text": "对话记录显示助手在收到模糊需求后主动提出了澄清问题（如询问公司行业/规模、客户管理的具体痛点、销售和售后的关系等），而非直接假设需求开始建模", "type": "transcript_check"},
